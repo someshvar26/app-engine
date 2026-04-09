@@ -1,5 +1,9 @@
-runtime: python310
-
+runtime: python310          # Python 3.10 runtime
 entrypoint: gunicorn -b :$PORT main:app
 
-instance_class: F1
+instance_class: F1          # Free tier instance (adjust if needed)
+
+# Optional: automatic scaling
+automatic_scaling:
+  min_instances: 1
+  max_instances: 2
