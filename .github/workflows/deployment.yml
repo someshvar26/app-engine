@@ -20,8 +20,8 @@ jobs:
 
       - name: Sync files to remote server using rsync
         env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_DEV_USER }}
-          GCP_VM_IP: ${{ secrets.GCP_DEV_IP }}
+          GCP_DEV_USER: ${{ secrets.GCP_DEV_USER }}
+          GCP_DEV_IP: ${{ secrets.GCP_DEV_IP }}
         run: |
           rsync -avz --delete \
           --no-times \
@@ -30,15 +30,15 @@ jobs:
           --exclude='node_modules/' \
           -e "ssh -o StrictHostKeyChecking=no" \
           ./ $GCP_DEV_USER@$GCP_DEV_IP:/var/www/html/
-            
+
       - name: SSH into the server and deploy with Docker Compose
         env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_DEV_USER }}
-          GCP_VM_IP: ${{ secrets.GCP_VM_IP_DEV }}
+          GCP_DEV_USER: ${{ secrets.GCP_DEV_USER }}
+          GCP_DEV_IP: ${{ secrets.GCP_DEV_IP }}
         run: |
           ssh -o StrictHostKeyChecking=no $GCP_DEV_USER@$GCP_DEV_IP << 'EOF'
             set -e
             cd /var/www/html
-            docker build -t app-engine
+            docker build -t app-engine .
             docker compose up -d
           EOF
