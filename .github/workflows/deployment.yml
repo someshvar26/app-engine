@@ -16,12 +16,12 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+          ssh-private-key: ${{ secrets.GCP_DEV_PRIVATE_KEY }}
 
       - name: Sync files to remote server using rsync
         env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_VM_USERNAME_DEV }}
-          GCP_VM_IP: ${{ secrets.GCP_VM_IP_DEV }}
+          GCP_VM_USERNAME: ${{ secrets.GCP_DEV_USER }}
+          GCP_VM_IP: ${{ secrets.GCP_DEV_IP }}
         run: |
           rsync -avz --delete \
           --no-times \
@@ -29,16 +29,16 @@ jobs:
           --exclude='.github/' \
           --exclude='node_modules/' \
           -e "ssh -o StrictHostKeyChecking=no" \
-          ./ $GCP_VM_USERNAME@$GCP_VM_IP:/var/www/svelte-dev/
+          ./ $GCP_DEV_USER@$GCP_DEV_IP:/var/www/html/
             
       - name: SSH into the server and deploy with Docker Compose
         env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_VM_USERNAME_DEV }}
+          GCP_VM_USERNAME: ${{ secrets.GCP_DEV_USER }}
           GCP_VM_IP: ${{ secrets.GCP_VM_IP_DEV }}
         run: |
-          ssh -o StrictHostKeyChecking=no $GCP_VM_USERNAME@$GCP_VM_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no $GCP_DEV_USER@$GCP_DEV_IP << 'EOF'
             set -e
             cd /var/www/html
-            docker system prune -af
+            docker build -t app-engine
             docker compose up -d
           EOF
