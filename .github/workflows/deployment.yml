@@ -39,6 +39,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no $GCP_DEV_USER@$GCP_DEV_IP << 'EOF'
             set -e
             cd /home/develope/app-engine
-            docker build -t app-engine 
+            docker build -t app-engine .
             
           EOF
