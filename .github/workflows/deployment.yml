@@ -2,6 +2,15 @@ name: Deploy to GCP DEV VM-testing
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "main"
+#--------------------
+# on:
+#   workflow_dispatch:
+#--------------------  
 # on:
 #   push:
 #     branches:
