@@ -1,4 +1,4 @@
-name: Deploy to GCP DEV VM
+name: Deploy to GCP DEV VM-testing
 
 on:
   push:
